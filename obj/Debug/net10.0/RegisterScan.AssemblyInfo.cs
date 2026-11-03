@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RegisterScan")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e581a5fdb2cc0c96c1aab30bbcde0c6f67df528f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b818ca3163360d848fefe75e734adf21ddc6b79e")]
 [assembly: System.Reflection.AssemblyProductAttribute("RegisterScan")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RegisterScan")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

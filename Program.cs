@@ -4,25 +4,20 @@ using System.Text;
 using System.Threading;
 using S7.Net;
 
-// ⭐ 解决 DataType 命名冲突
 using S7DataType = S7.Net.DataType;
 
 namespace S7200SmartReader {
     class Program {
-        // ===== 默认参数 =====
         private const string DefaultIp = "192.168.2.2";
         private const int DefaultStartByte = 1200;
         private const int DefaultReadLength = 40;
         private const int DefaultPollIntervalMs = 1000;
         private const int DbNumber = 1;   // S7-200 SMART 的 V 区固定映射为 DB1
 
-        // ⭐ 全局唯一的 PLC IP，程序启动时输入一次
         private static string _plcIp = DefaultIp;
 
         static void Main() {
             Console.WriteLine("=== S7-200 SMART V区读写工具 ===");
-
-            // ⭐ 只在启动时询问一次 IP
             _plcIp = PromptString($"PLC IP (默认 {DefaultIp}): ", DefaultIp);
             Console.WriteLine($"当前 PLC IP: {_plcIp}");
             Console.WriteLine();
@@ -62,17 +57,10 @@ namespace S7200SmartReader {
             }
         }
 
-        // ============================================================
-        // 修改 IP（可选功能，避免"关掉重开"才能换目标）
-        // ============================================================
         static void ChangeIp() {
             _plcIp = PromptString($"新 PLC IP (当前 {_plcIp}): ", _plcIp);
             Console.WriteLine($"已切换 PLC IP: {_plcIp}");
         }
-
-        // ============================================================
-        // 模式 1：轮询读取连续字节块
-        // ============================================================
         static void RunReadBlock() {
             int startByte = PromptInt("起始字节偏移 (默认 1200): ", DefaultStartByte, 0, 65535);
             int length = PromptInt("读取长度(字节，默认 40): ", DefaultReadLength, 1, 2000);
@@ -94,7 +82,6 @@ namespace S7200SmartReader {
             try {
                 while (!stopFlag) {
                     try {
-                        // ⭐ 复用全局 _plcIp
                         if (plc == null || !plc.IsConnected)
                             plc = Connect(_plcIp);
 
@@ -114,8 +101,6 @@ namespace S7200SmartReader {
                         Thread.Sleep(3000);
                         continue;
                     }
-
-                    // 分段 sleep，保证 Ctrl+C 后能快速退出
                     int waited = 0;
                     while (waited < interval && !stopFlag) {
                         int step = Math.Min(100, interval - waited);
@@ -130,10 +115,6 @@ namespace S7200SmartReader {
                 Console.WriteLine("已停止轮询。");
             }
         }
-
-        // ============================================================
-        // 模式 2：写入数据
-        // ============================================================
         static void RunWrite() {
             int startByte = PromptInt("起始字节偏移 (默认 0): ", 0, 0, 65535);
             int length = PromptInt("数据长度(字节): ", 1, 1, 2000);
@@ -164,7 +145,6 @@ namespace S7200SmartReader {
 
             Plc plc = null;
             try {
-                // ⭐ 复用全局 _plcIp
                 plc = Connect(_plcIp);
                 plc.WriteBytes(S7DataType.DataBlock, DbNumber, startByte, payload);
                 Console.WriteLine($"写入成功：DB1.DBB{startByte} 起 {payload.Length} 字节");
@@ -174,10 +154,6 @@ namespace S7200SmartReader {
                 SafeClose(plc);
             }
         }
-
-        // ============================================================
-        // 模式 3：读取单个字节
-        // ============================================================
         static void RunReadSingleByte() {
             Console.Write("字节号 (VBxx，例如 1205 或 VB1205): ");
             string raw = Console.ReadLine()?.Trim() ?? "";
@@ -191,7 +167,6 @@ namespace S7200SmartReader {
 
             Plc plc = null;
             try {
-                // ⭐ 复用全局 _plcIp
                 plc = Connect(_plcIp);
                 byte[] data = plc.ReadBytes(S7DataType.DataBlock, DbNumber, byteAddr, 1);
                 if (data == null || data.Length < 1) {
@@ -215,15 +190,6 @@ namespace S7200SmartReader {
                 SafeClose(plc);
             }
         }
-
-        // ============================================================
-        // 辅助方法
-        // ============================================================
-
-        /// <summary>
-        /// 建立 PLC 连接。
-        /// S7-200 SMART 使用 CpuType.S71200 兼容性最稳，Rack=0, Slot=1。
-        /// </summary>
         static Plc Connect(string ip) {
             var plc = new Plc(CpuType.S71200, ip, 0, 1);
             plc.Open();
@@ -237,7 +203,6 @@ namespace S7200SmartReader {
             try { plc?.Close(); } catch { /* 忽略 */ }
         }
 
-        /// <summary>通用解析 & 打印（起始地址可变）</summary>
         static void ParseAndPrint(byte[] data, int startByte) {
             if (data == null || data.Length == 0)
                 return;
@@ -273,23 +238,13 @@ namespace S7200SmartReader {
             }
             Console.WriteLine();
         }
-
-        /// <summary>
-        /// 解析用户输入内容为字节数组。
-        /// - 双引号包裹 → 强制按 ASCII 文本处理；
-        /// - 全部为两位十六进制 token → 按十六进制处理，字节数必须等于 expectedLength；
-        /// - 其它 → 按 ASCII 文本处理，按 expectedLength 截断或补 0。
-        /// </summary>
         static byte[] ParsePayload(string content, int expectedLength, out string error) {
             error = null;
             string text = (content ?? "").Trim();
 
-            // 双引号强制文本
             bool forceText = text.Length >= 2 && text.StartsWith("\"") && text.EndsWith("\"");
             if (forceText)
                 text = text.Substring(1, text.Length - 2);
-
-            // 尝试识别十六进制
             bool looksHex = !forceText;
             var hexBytes = new List<byte>();
             if (looksHex) {
@@ -310,8 +265,6 @@ namespace S7200SmartReader {
                     hexBytes.Add(Convert.ToByte(token, 16));
                 }
             }
-
-            // 十六进制模式：长度必须严格一致
             if (looksHex) {
                 if (hexBytes.Count != expectedLength) {
                     error = $"十六进制解析出 {hexBytes.Count} 字节，与指定长度 {expectedLength} 不一致。";
@@ -319,8 +272,6 @@ namespace S7200SmartReader {
                 }
                 return hexBytes.ToArray();
             }
-
-            // 文本模式：截断 / 补 0
             byte[] ascii = Encoding.ASCII.GetBytes(text);
             var result = new byte[expectedLength];
             int copy = Math.Min(ascii.Length, expectedLength);
@@ -343,8 +294,6 @@ namespace S7200SmartReader {
             }
             return true;
         }
-
-        /// <summary>取数组指定段</summary>
         static byte[] Slice(byte[] src, int offset, int length) {
             var dst = new byte[length];
             Array.Copy(src, offset, dst, 0, length);
