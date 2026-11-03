@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "y2kKp0R+e9k=",
+  "success": true,
+  "projectFilePath": "D:\\git\\RegisterScan\\RegisterScan\\RegisterScan.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Hyphis\\.nuget\\packages\\s7netplus\\0.20.0\\s7netplus.0.20.0.nupkg.sha512"
+  ],
+  "logs": []
+}

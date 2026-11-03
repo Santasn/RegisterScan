@@ -1,0 +1,17 @@
+C:\Users\Hyphis\Desktop\分站代码测试\RegisterScan\obj\Debug\net10.0\RegisterScan.csproj.AssemblyReference.cache
+C:\Users\Hyphis\Desktop\分站代码测试\RegisterScan\obj\Debug\net10.0\RegisterScan.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Hyphis\Desktop\分站代码测试\RegisterScan\obj\Debug\net10.0\RegisterScan.AssemblyInfoInputs.cache
+C:\Users\Hyphis\Desktop\分站代码测试\RegisterScan\obj\Debug\net10.0\RegisterScan.AssemblyInfo.cs
+C:\Users\Hyphis\Desktop\分站代码测试\RegisterScan\obj\Debug\net10.0\RegisterScan.csproj.CoreCompileInputs.cache
+C:\Users\Hyphis\Desktop\分站代码测试\RegisterScan\bin\Debug\net10.0\RegisterScan.exe
+C:\Users\Hyphis\Desktop\分站代码测试\RegisterScan\bin\Debug\net10.0\RegisterScan.deps.json
+C:\Users\Hyphis\Desktop\分站代码测试\RegisterScan\bin\Debug\net10.0\RegisterScan.runtimeconfig.json
+C:\Users\Hyphis\Desktop\分站代码测试\RegisterScan\bin\Debug\net10.0\RegisterScan.dll
+C:\Users\Hyphis\Desktop\分站代码测试\RegisterScan\bin\Debug\net10.0\RegisterScan.pdb
+C:\Users\Hyphis\Desktop\分站代码测试\RegisterScan\bin\Debug\net10.0\S7.Net.dll
+C:\Users\Hyphis\Desktop\分站代码测试\RegisterScan\obj\Debug\net10.0\Register.559A2559.Up2Date
+C:\Users\Hyphis\Desktop\分站代码测试\RegisterScan\obj\Debug\net10.0\RegisterScan.dll
+C:\Users\Hyphis\Desktop\分站代码测试\RegisterScan\obj\Debug\net10.0\refint\RegisterScan.dll
+C:\Users\Hyphis\Desktop\分站代码测试\RegisterScan\obj\Debug\net10.0\RegisterScan.pdb
+C:\Users\Hyphis\Desktop\分站代码测试\RegisterScan\obj\Debug\net10.0\RegisterScan.genruntimeconfig.cache
+C:\Users\Hyphis\Desktop\分站代码测试\RegisterScan\obj\Debug\net10.0\ref\RegisterScan.dll
